@@ -5,6 +5,15 @@ import com.javanauta.agendadortarefas.infrastructure.entity.Tarefa;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public interface TarefaRepository extends MongoRepository<Tarefa, String> {
+    // Encontrar as Tarefas de acordo com determinado Intervalo de Tempo
+    List<Tarefa> findByDataEventoBetween(LocalDateTime dataInicial,
+                                         LocalDateTime dataFinal);
+
+    // Encontrar as Tarefas de um determinado Usuário pelo seu Email
+    List<Tarefa> findByEmailUsuario(String email);
 }
