@@ -44,8 +44,10 @@ public class TarefaService {
     }
 
     public List<TarefaDTO> buscarTarefasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
-        // Pegar a Lista de Tarefas que estão entre um determinado Período de Tempo
-        List<Tarefa> listaTarefas = tarefaRepository.findByDataEventoBetween(dataInicial, dataFinal);
+        // Pegar a Lista de Tarefas que estão entre um determinado Período de Tempo e Status como Pendente
+        List<Tarefa> listaTarefas = tarefaRepository.findByDataEventoBetweenAndStatusNotificacao(dataInicial,
+                                                                                                 dataFinal,
+                                                                                                 StatusNotificacaoEnum.PENDENTE);
 
         // Retornar a Lista de Tarefas Entity convertida para DTO
         return tarefaConverter.converterParaListaTarefaDTO(listaTarefas);
