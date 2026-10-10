@@ -1,6 +1,6 @@
 package com.javanauta.agendadortarefas.business;
 
-import com.javanauta.agendadortarefas.business.dtos.TarefaDTO;
+import com.javanauta.agendadortarefas.business.dtos.TarefaDTORecord;
 import com.javanauta.agendadortarefas.business.mapper.TarefaConverter;
 import com.javanauta.agendadortarefas.business.mapper.TarefaUpdateConverter;
 import com.javanauta.agendadortarefas.infrastructure.entity.Tarefa;
@@ -25,25 +25,33 @@ public class TarefaService {
     private final TarefaUpdateConverter tarefaUpdateConverter;
     private final JwtUtil jwtUtil;
 
-    public TarefaDTO gravarTarefa(String token, TarefaDTO tarefaDTO) {
+    public TarefaDTORecord gravarTarefa(String token, TarefaDTORecord tarefaDTO) {
         // Pegar o Email do Usuário através do Token JWT
         String email = jwtUtil.extrairEmailToken(token.substring(7));
 
-        // Definir a Data de Criação como Data e Hora Atual
-        tarefaDTO.setDataCriacao(LocalDateTime.now());
-        // Definir o Status de Notificação como Pendente
-        tarefaDTO.setStatusNotificacao(StatusNotificacaoEnum.PENDENTE);
-        // Definir o Email do Usuário extraído do Token
-        tarefaDTO.setEmailUsuario(email);
+        // Criar um novo Objeto DTO mas definindo Data de Criação, Email do Usuário e Status Notificação
+        TarefaDTORecord tarefaDTOFinal = new TarefaDTORecord(
+                null,
+                tarefaDTO.nomeTarefa(),
+                tarefaDTO.descricao(),
+                // Definir a Data de Criação como Data e Hora Atual
+                LocalDateTime.now(),
+                tarefaDTO.dataEvento(),
+                // Definir o Email do Usuário extraído do Token
+                email,
+                null,
+                // Definir o Status de Notificação como Pendente
+                StatusNotificacaoEnum.PENDENTE
+        );
 
         // Converter a Tarefa à salvar no Banco para Entity
-        Tarefa tarefa = tarefaConverter.converterParaTarefa(tarefaDTO);
+        Tarefa tarefa = tarefaConverter.converterParaTarefa(tarefaDTOFinal);
 
         // Salvar a Tarefa no Banco de Dados e retornando DTO
         return tarefaConverter.converterParaTarefaDTO(tarefaRepository.save(tarefa));
     }
 
-    public List<TarefaDTO> buscarTarefasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
+    public List<TarefaDTORecord> buscarTarefasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
         // Pegar a Lista de Tarefas que estão entre um determinado Período de Tempo e Status como Pendente
         List<Tarefa> listaTarefas = tarefaRepository.findByDataEventoBetweenAndStatusNotificacao(dataInicial,
                                                                                                  dataFinal,
@@ -53,7 +61,7 @@ public class TarefaService {
         return tarefaConverter.converterParaListaTarefaDTO(listaTarefas);
     }
 
-    public List<TarefaDTO> buscarTarefasPorEmail(String token) {
+    public List<TarefaDTORecord> buscarTarefasPorEmail(String token) {
         // Pegar o Email do Usuário através do Token JWT
         String email = jwtUtil.extrairEmailToken(token.substring(7));
 
@@ -74,7 +82,7 @@ public class TarefaService {
         }
     }
 
-    public TarefaDTO alterarStatusTarefa(StatusNotificacaoEnum status, String id) {
+    public TarefaDTORecord alterarStatusTarefa(StatusNotificacaoEnum status, String id) {
         try {
             // Encontrar a Tarefa que terá seu Status alterado pelo ID
             Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(
@@ -94,7 +102,7 @@ public class TarefaService {
         }
     }
 
-    public TarefaDTO alterarTarefa(TarefaDTO tarefaDTO, String id) {
+    public TarefaDTORecord alterarTarefa(TarefaDTORecord tarefaDTO, String id) {
         try {
             // Encontrar a Tarefa à ser alterado pelo ID
             Tarefa tarefa = tarefaRepository.findById(id).orElseThrow(
