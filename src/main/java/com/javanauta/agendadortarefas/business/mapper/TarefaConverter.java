@@ -1,7 +1,8 @@
 package com.javanauta.agendadortarefas.business.mapper;
 
-import com.javanauta.agendadortarefas.business.dtos.TarefaDTO;
+import com.javanauta.agendadortarefas.business.dtos.TarefaDTORecord;
 import com.javanauta.agendadortarefas.infrastructure.entity.Tarefa;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,9 +13,9 @@ public interface TarefaConverter {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "dataEvento", target = "dataEvento")
     @Mapping(source = "dataCriacao", target = "dataCriacao")
-    Tarefa converterParaTarefa(TarefaDTO tarefaDTO);
-    TarefaDTO converterParaTarefaDTO(Tarefa tarefa);
+    Tarefa converterParaTarefa(TarefaDTORecord tarefaDTO);
+    TarefaDTORecord converterParaTarefaDTO(Tarefa tarefa);
 
-    List<Tarefa> converterParaListaTarefa(List<TarefaDTO> listaTarefaDTO);
-    List<TarefaDTO> converterParaListaTarefaDTO(List<Tarefa> listaTarefa);
+    List<Tarefa> converterParaListaTarefa(List<TarefaDTORecord> listaTarefaDTO);
+    List<TarefaDTORecord> converterParaListaTarefaDTO(List<Tarefa> listaTarefa);
 }
