@@ -127,7 +127,7 @@ Os caminhos exatos das rotas, os parâmetros e os formatos das requisições dev
 | Método HTTP | Recurso | Descrição |
 |---|---|---|
 | `POST` | Tarefas | Cadastrar uma nova tarefa. |
-| `GET` | Eventos | Consultar tarefas em um período definido por uma data inicial e uma data final. |
+| `GET` | Eventos | Consultar tarefas em um período. |
 | `GET` | Tarefas por usuário | Buscar as tarefas associadas a um usuário por meio de seu e-mail. |
 | `DELETE` | Tarefas | Excluir uma tarefa a partir de seu ID. |
 | `PUT` | Tarefas | Atualizar as informações de uma tarefa existente. |
